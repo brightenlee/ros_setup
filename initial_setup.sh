@@ -27,7 +27,25 @@
 # NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
 # THE POSSIBILITY OF SUCH DAMAGE.
 
-ROS_DISTRO="melodic" 
+helpFunction()
+{
+  echo "Usage: ./initial_setup -r <ros distro>"
+  echo ""
+  echo -e "  -r <ros distro>\tdefault=melodic"
+  echo ""
+  exit 1
+}
+
+ROS_DISTRO="melodic"
+
+while getopts "r:h" opt
+do
+  case "$opt" in
+    r) ROS_DISTRO="$OPTARG" ;;
+    h) helpFunction ;;
+    ?) helpFunction ;;
+  esac
+done
 
 echo -e "\033[1;31mStarting PC setup ...\033[0m"
 sudo apt update
@@ -41,9 +59,20 @@ sudo apt-key adv --keyserver 'hkp://keyserver.ubuntu.com:80' --recv-key C1CF6E31
 sudo apt update
 sudo apt install -y ros-$ROS_DISTRO-desktop-full
 
-echo -e "\nsource /opt/ros/$ROS_DISTRO/setup.bash\nsource ~/catkin_ws/devel/setup.bash\n\nexport ROS_MASTER_URI=http://localhost:11311" >> ~/.bashrc
-source /opt/ros/$ROS_DISTRO/setup.bash
+# Create the ROS enviornmnet file
+echo -e "#!/bin/bash
 
+# Please write the ROS environment variables here
+
+source /opt/ros/$ROS_DISTRO/setup.bash
+source ~/catkin_ws/devel/setup.bash
+
+export ROS_MASTER_URI=http://localhost:11311" >> $HOME/env.sh
+
+sudo mv $HOME/env.sh /etc/ros/
+echo -e "\nsource /etc/ros/env.sh" >> ~/.bashrc
+
+source /opt/ros/$ROS_DISTRO/setup.bash
 sudo apt install -y python-rosdep python-rosinstall python-rosinstall-generator python-wstool build-essential python-rosdep ros-$ROS_DISTRO-rqt* ros-$ROS_DISTRO-ros-control ros-$ROS_DISTRO-ros-controllers ros-$ROS_DISTRO-navigation
 sudo rosdep init
 rosdep update
