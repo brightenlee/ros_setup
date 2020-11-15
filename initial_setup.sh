@@ -59,6 +59,11 @@ sudo apt-key adv --keyserver 'hkp://keyserver.ubuntu.com:80' --recv-key C1CF6E31
 sudo apt update
 sudo apt install -y ros-$ROS_DISTRO-desktop-full
 
+source /opt/ros/$ROS_DISTRO/setup.bash
+sudo apt install -y python-rosdep python-rosinstall python-rosinstall-generator python-wstool build-essential python-rosdep ros-$ROS_DISTRO-rqt* ros-$ROS_DISTRO-ros-control ros-$ROS_DISTRO-ros-controllers ros-$ROS_DISTRO-navigation
+sudo rosdep init
+rosdep update
+
 # Create the ROS enviornmnet file
 echo -e "#!/bin/bash
 
@@ -71,11 +76,6 @@ export ROS_MASTER_URI=http://localhost:11311" >> $HOME/env.sh
 
 sudo mv $HOME/env.sh /etc/ros/
 echo -e "\nsource /etc/ros/env.sh" >> ~/.bashrc
-
-source /opt/ros/$ROS_DISTRO/setup.bash
-sudo apt install -y python-rosdep python-rosinstall python-rosinstall-generator python-wstool build-essential python-rosdep ros-$ROS_DISTRO-rqt* ros-$ROS_DISTRO-ros-control ros-$ROS_DISTRO-ros-controllers ros-$ROS_DISTRO-navigation
-sudo rosdep init
-rosdep update
 
 if [ ! -d "$HOME/catkin_ws" ]; then
   echo -e "\033[1;31mCreating ROS workspace ...\033[0m"
