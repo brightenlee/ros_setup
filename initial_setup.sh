@@ -47,12 +47,16 @@ do
   esac
 done
 
+
+# Update repository and install dependencies
 echo -e "\033[1;31mStarting PC setup ...\033[0m"
 sudo apt update
 sudo apt upgrade -y
 sudo apt install -y ssh net-tools terminator chrony ntpdate vim git setserial
 sudo ntpdate ntp.ubuntu.com
 
+
+# Install ROS
 echo -e "\033[1;31mStarting ROS $ROS_DISTRO installation ...\033[0m"
 sudo sh -c 'echo "deb http://packages.ros.org/ros/ubuntu $(lsb_release -sc) main" > /etc/apt/sources.list.d/ros-latest.list'
 sudo apt-key adv --keyserver 'hkp://keyserver.ubuntu.com:80' --recv-key C1CF6E31E6BADE8868B172B4F42ED6FBAB17C654
@@ -64,7 +68,20 @@ sudo apt install -y python-rosdep python-rosinstall python-rosinstall-generator 
 sudo rosdep init
 rosdep update
 
+
 # Create the ROS enviornmnet file
+if [ ! -f "$HOME/env.sh" ] && [ ! -f "/etc/ros/env.sh" ]; then
+  echo -e "\nsource /etc/ros/env.sh" >> ~/.bashrc
+fi
+
+if [ -f "$HOME/env.sh" ]; then
+ sudo rm $HOME/env.sh
+fi
+
+if [ -f "/etc/ros/env.sh" ]; then
+ sudo rm /etc/ros/env.sh
+fi
+
 echo -e "#!/bin/bash
 
 # Please write the ROS environment variables here
@@ -75,8 +92,9 @@ source ~/catkin_ws/devel/setup.bash
 export ROS_MASTER_URI=http://localhost:11311" >> $HOME/env.sh
 
 sudo mv $HOME/env.sh /etc/ros/
-echo -e "\nsource /etc/ros/env.sh" >> ~/.bashrc
 
+
+# Create the ROS workspace
 if [ ! -d "$HOME/catkin_ws" ]; then
   echo -e "\033[1;31mCreating ROS workspace ...\033[0m"
   mkdir -p ~/catkin_ws/src
@@ -86,6 +104,8 @@ if [ ! -d "$HOME/catkin_ws" ]; then
   catkin_make
 fi
 
+
+# Install RealSense SDK and ROS package
 echo -e "\033[1;31mStarting RealSense SDK installation ...\033[0m"
 sudo apt-key adv --keyserver keys.gnupg.net --recv-key F6E65AC044F831AC80A06380C8B3A55A6F3EFCDE || sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-key F6E65AC044F831AC80A06380C8B3A55A6F3EFCDE
 sudo add-apt-repository "deb http://realsense-hw-public.s3.amazonaws.com/Debian/apt-repo bionic main" -u
