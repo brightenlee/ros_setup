@@ -64,7 +64,7 @@ sudo apt update
 sudo apt install -y ros-$ROS_DISTRO-desktop-full
 
 source /opt/ros/$ROS_DISTRO/setup.bash
-sudo apt install -y python-rosdep python-rosinstall python-rosinstall-generator python-wstool build-essential python-rosdep ros-$ROS_DISTRO-rqt* ros-$ROS_DISTRO-ros-control ros-$ROS_DISTRO-ros-controllers ros-$ROS_DISTRO-navigation
+sudo apt install -y python-rosdep python-rosinstall python-rosinstall-generator python-wstool build-essential python-rosdep ros-$ROS_DISTRO-rqt* ros-$ROS_DISTRO-ros-control ros-$ROS_DISTRO-ros-controllers ros-$ROS_DISTRO-navigation ros-$ROS_DISTRO-serial
 sudo rosdep init
 rosdep update
 
