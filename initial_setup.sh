@@ -52,7 +52,7 @@ done
 echo -e "\033[1;31mStarting PC setup ...\033[0m"
 sudo apt update
 sudo apt upgrade -y
-sudo apt install -y ssh net-tools terminator chrony ntpdate vim git
+sudo apt install -y ssh net-tools terminator chrony ntpdate vim git setserial
 sudo ntpdate ntp.ubuntu.com
 
 
