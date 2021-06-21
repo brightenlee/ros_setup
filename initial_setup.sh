@@ -59,7 +59,7 @@ sudo ntpdate ntp.ubuntu.com
 # Install ROS
 echo -e "\033[1;31mStarting ROS $ROS_DISTRO installation ...\033[0m"
 sudo sh -c 'echo "deb http://packages.ros.org/ros/ubuntu $(lsb_release -sc) main" > /etc/apt/sources.list.d/ros-latest.list'
-sudo apt-key adv --keyserver 'hkp://keyserver.ubuntu.com:80' --recv-key C1CF6E31E6BADE8868B172B4F42ED6FBAB17C654
+curl -s https://raw.githubusercontent.com/ros/rosdistro/master/ros.asc | sudo apt-key add -
 sudo apt update
 sudo apt install -y ros-$ROS_DISTRO-desktop-full
 
@@ -103,11 +103,3 @@ if [ ! -d "$HOME/catkin_ws" ]; then
   cd ~/catkin_ws
   catkin_make
 fi
-
-
-# Install RealSense SDK and ROS package
-echo -e "\033[1;31mStarting RealSense SDK installation ...\033[0m"
-sudo apt-key adv --keyserver keys.gnupg.net --recv-key F6E65AC044F831AC80A06380C8B3A55A6F3EFCDE || sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-key F6E65AC044F831AC80A06380C8B3A55A6F3EFCDE
-sudo add-apt-repository "deb http://realsense-hw-public.s3.amazonaws.com/Debian/apt-repo bionic main" -u
-sudo apt install -y librealsense2-dkms librealsense2-utils
-sudo apt install -y ros-$ROS_DISTRO-realsense2-camera
