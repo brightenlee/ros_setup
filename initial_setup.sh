@@ -47,12 +47,17 @@ do
   esac
 done
 
+if [ "$ROS_DISTRO" != "melodic" ] && [ "$R" != "noetic" ]; then 
+  echo -e "\033[1;31mInvalid ROS version.\033[0m"
+  exit 1
+fi
+
 
 # Update repository and install dependencies
 echo -e "\033[1;31mStarting PC setup ...\033[0m"
 sudo apt update
 sudo apt upgrade -y
-sudo apt install -y ssh net-tools terminator chrony ntpdate vim git setserial
+sudo apt install -y ssh net-tools terminator chrony ntpdate curl vim git setserial
 sudo ntpdate ntp.ubuntu.com
 
 
@@ -64,7 +69,15 @@ sudo apt update
 sudo apt install -y ros-$ROS_DISTRO-desktop-full
 
 source /opt/ros/$ROS_DISTRO/setup.bash
-sudo apt install -y python-rosdep python-rosinstall python-rosinstall-generator python-wstool build-essential python-rosdep ros-$ROS_DISTRO-rqt* ros-$ROS_DISTRO-ros-control ros-$ROS_DISTRO-ros-controllers ros-$ROS_DISTRO-navigation ros-$ROS_DISTRO-serial
+
+if [ "$ROS_DISTRO" != "melodic" ]; then
+  sudo apt install -y python-rosdep python-rosinstall python-rosinstall-generator python-wstool build-essential python-rosdep ros-$ROS_DISTRO-rqt* ros-$ROS_DISTRO-ros-control ros-$ROS_DISTRO-ros-controllers ros-$ROS_DISTRO-navigation ros-$ROS_DISTRO-serial
+fi
+
+if [ "$ROS_DISTRO" != "noetic" ]; then
+  sudo apt install -y python3-rosdep python3-rosinstall python3-rosinstall-generator python3-wstool build-essential python3-rosdep ros-$ROS_DISTRO-rqt* ros-$ROS_DISTRO-ros-control ros-$ROS_DISTRO-ros-controllers ros-$ROS_DISTRO-navigation ros-$ROS_DISTRO-serial
+fi
+
 sudo rosdep init
 rosdep update
 
