@@ -70,11 +70,11 @@ sudo apt install -y ros-$ROS_DISTRO-desktop-full
 
 source /opt/ros/$ROS_DISTRO/setup.bash
 
-if [ "$ROS_DISTRO" != "melodic" ]; then
+if [ "$ROS_DISTRO" == "melodic" ]; then
   sudo apt install -y python-rosdep python-rosinstall python-rosinstall-generator python-wstool build-essential python-rosdep ros-$ROS_DISTRO-rqt* ros-$ROS_DISTRO-ros-control ros-$ROS_DISTRO-ros-controllers ros-$ROS_DISTRO-navigation ros-$ROS_DISTRO-serial
 fi
 
-if [ "$ROS_DISTRO" != "noetic" ]; then
+if [ "$ROS_DISTRO" == "noetic" ]; then
   sudo apt install -y python3-rosdep python3-rosinstall python3-rosinstall-generator python3-wstool build-essential python3-rosdep ros-$ROS_DISTRO-rqt* ros-$ROS_DISTRO-ros-control ros-$ROS_DISTRO-ros-controllers ros-$ROS_DISTRO-navigation ros-$ROS_DISTRO-serial
 fi
 
@@ -119,13 +119,13 @@ fi
 
 
 # Install RealSense SDK
-if [ "$ROS_DISTRO" != "melodic" ]; then
+if [ "$ROS_DISTRO" == "melodic" ]; then
   sudo apt-key adv --keyserver keys.gnupg.net --recv-key F6E65AC044F831AC80A06380C8B3A55A6F3EFCDE || sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-key F6E65AC044F831AC80A06380C8B3A55A6F3EFCDEfi
   sudo add-apt-repository "deb http://librealsense.intel.com/Debian/apt-repo bionic main" -u
   sudo apt install -y librealsense2-dkms librealsense2-utils librealsense2-dev librealsense2-dbg
 fi
 
-if [ "$ROS_DISTRO" != "noetic" ]; then
+if [ "$ROS_DISTRO" == "noetic" ]; then
   sudo apt-key adv --keyserver keys.gnupg.net --recv-key F6E65AC044F831AC80A06380C8B3A55A6F3EFCDE || sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-key F6E65AC044F831AC80A06380C8B3A55A6F3EFCDEfi
   sudo add-apt-repository "deb http://librealsense.intel.com/Debian/apt-repo focal main" -u
    sudo apt install -y librealsense2-dkms librealsense2-utils librealsense2-dev librealsense2-dbg
