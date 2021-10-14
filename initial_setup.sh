@@ -47,7 +47,7 @@ do
   esac
 done
 
-if [ "$ROS_DISTRO" != "melodic" ] && [ "$R" != "noetic" ]; then 
+if [ "$ROS_DISTRO" != "melodic" ] && [ "$ROS_DISTRO" != "noetic" ]; then 
   echo -e "\033[1;31mInvalid ROS version.\033[0m"
   exit 1
 fi
@@ -82,6 +82,17 @@ sudo rosdep init
 rosdep update
 
 
+# Create the ROS workspace
+if [ ! -d "$HOME/catkin_ws" ]; then
+  echo -e "\033[1;31mCreating ROS workspace ...\033[0m"
+  mkdir -p ~/catkin_ws/src
+  cd ~/catkin_ws/src
+  catkin_init_workspace
+  cd ~/catkin_ws
+  catkin_make
+fi
+
+
 # Create the ROS enviornmnet file
 if [ ! -f "$HOME/env.sh" ] && [ ! -f "/etc/ros/env.sh" ]; then
   echo -e "\nsource /etc/ros/env.sh" >> ~/.bashrc
@@ -105,17 +116,6 @@ source ~/catkin_ws/devel/setup.bash
 export ROS_MASTER_URI=http://localhost:11311" >> $HOME/env.sh
 
 sudo mv $HOME/env.sh /etc/ros/
-
-
-# Create the ROS workspace
-if [ ! -d "$HOME/catkin_ws" ]; then
-  echo -e "\033[1;31mCreating ROS workspace ...\033[0m"
-  mkdir -p ~/catkin_ws/src
-  cd ~/catkin_ws/src
-  catkin_init_workspace
-  cd ~/catkin_ws
-  catkin_make
-fi
 
 
 # Install RealSense SDK
