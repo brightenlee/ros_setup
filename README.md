@@ -1,8 +1,8 @@
 # Initial setup of Ubuntu and ROS
 
 ```
-git clone https://github.com/brightenlee/initial_setup.git
-cd initial_setup
-sudo chmod +x initial_setup.sh
-./initial_setup.sh -r <ros distro>
+git clone https://github.com/brightenlee/ros_setup.git
+cd ros_setup
+sudo chmod +x ros_setup.sh
+./ros_setup.sh -r <ros distro>
 ```
