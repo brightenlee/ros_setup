@@ -29,7 +29,7 @@
 
 helpFunction()
 {
-  echo "Usage: ./initial_setup -r <ros distro>"
+  echo "Usage: ./ros_setup -r <ros distro>"
   echo ""
   echo -e "  -r <ros distro>\tmelodic or noetic"
   echo ""
