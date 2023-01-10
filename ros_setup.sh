@@ -31,7 +31,7 @@ helpFunction()
 {
   echo "Usage: ./ros_setup -r <ros distro>"
   echo ""
-  echo -e "  -r <ros distro>\tmelodic or noetic"
+  echo -e "  -r <ros distro>\tmelodic, noetic"
   echo ""
   exit 1
 }
@@ -57,7 +57,7 @@ fi
 echo -e "\033[1;31mStarting PC setup ...\033[0m"
 sudo apt update
 sudo apt upgrade -y
-sudo apt install -y ssh net-tools terminator chrony ntpdate curl vim git setserial
+sudo apt install -y ssh net-tools terminator chrony ntpdate curl vim git
 sudo ntpdate ntp.ubuntu.com
 
 
@@ -71,11 +71,11 @@ sudo apt install -y ros-$ROS_DISTRO-desktop-full
 source /opt/ros/$ROS_DISTRO/setup.bash
 
 if [ "$ROS_DISTRO" == "melodic" ]; then
-  sudo apt install -y python-rosdep python-rosinstall python-rosinstall-generator python-wstool build-essential python-rosdep ros-$ROS_DISTRO-rqt* ros-$ROS_DISTRO-ros-control ros-$ROS_DISTRO-ros-controllers ros-$ROS_DISTRO-navigation ros-$ROS_DISTRO-serial
+  sudo apt install -y python-rosdep python-rosinstall python-rosinstall-generator python-wstool build-essential ros-$ROS_DISTRO-rqt* ros-$ROS_DISTRO-ros-control ros-$ROS_DISTRO-ros-controllers ros-$ROS_DISTRO-navigation ros-$ROS_DISTRO-serial
 fi
 
 if [ "$ROS_DISTRO" == "noetic" ]; then
-  sudo apt install -y python3-rosinstall python3-rosinstall-generator python3-wstool build-essential python3-rosdep ros-$ROS_DISTRO-rqt* ros-$ROS_DISTRO-ros-control ros-$ROS_DISTRO-ros-controllers ros-$ROS_DISTRO-navigation
+  sudo apt install -y python3-rosdep python3-rosinstall python3-rosinstall-generator python3-wstool build-essential ros-$ROS_DISTRO-rqt* ros-$ROS_DISTRO-ros-control ros-$ROS_DISTRO-ros-controllers ros-$ROS_DISTRO-navigation ros-$ROS_DISTRO-serial
 fi
 
 sudo rosdep init
