@@ -57,7 +57,7 @@ fi
 echo -e "\033[1;31mStarting PC setup ...\033[0m"
 sudo apt update
 sudo apt upgrade -y
-sudo apt install -y ssh net-tools terminator chrony ntpdate curl vim git
+sudo apt install -y ssh net-tools terminator ntpdate curl vim git
 sudo ntpdate ntp.ubuntu.com
 
 
@@ -116,9 +116,3 @@ source ~/catkin_ws/devel/setup.bash
 export ROS_MASTER_URI=http://localhost:11311" >> $HOME/env.sh
 
 sudo mv $HOME/env.sh /etc/ros/
-
-
-# Install RealSense SDK
-sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-key F6E65AC044F831AC80A06380C8B3A55A6F3EFCDE || sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-key F6E65AC044F831AC80A06380C8B3A55A6F3EFCDE
-sudo add-apt-repository "deb https://librealsense.intel.com/Debian/apt-repo $(lsb_release -cs) main" -u
-sudo apt install -y librealsense2-dkms librealsense2-utils
