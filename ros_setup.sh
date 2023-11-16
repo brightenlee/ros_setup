@@ -27,9 +27,8 @@
 # NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
 # THE POSSIBILITY OF SUCH DAMAGE.
 
-helpFunction()
-{
-  echo "Usage: ./ros_setup -r <ros distro>"
+helpFunction() {
+  echo "Usage: ./ros_setup.sh -r <ros distro>"
   echo ""
   echo -e "  -r <ros distro>\tmelodic, noetic"
   echo ""
@@ -38,31 +37,30 @@ helpFunction()
 
 ROS_DISTRO=""
 
-while getopts "r:h" opt
-do
+while getopts "r:h" opt; do
   case "$opt" in
-    r) ROS_DISTRO="$OPTARG" ;;
-    h) helpFunction ;;
-    ?) helpFunction ;;
+  r) ROS_DISTRO="$OPTARG" ;;
+  h) helpFunction ;;
+  ?) helpFunction ;;
   esac
 done
 
-if [ "$ROS_DISTRO" != "melodic" ] && [ "$ROS_DISTRO" != "noetic" ]; then 
+if [ "$ROS_DISTRO" != "melodic" ] && [ "$ROS_DISTRO" != "noetic" ]; then
   echo -e "\033[1;31mInvalid ROS version.\033[0m"
   exit 1
 fi
 
-
 # Update repository and install dependencies
-echo -e "\033[1;31mStarting PC setup ...\033[0m"
+echo -e "\033[1;31mUpdate repository and install dependencies.\033[0m"
+
 sudo apt update
 sudo apt upgrade -y
 sudo apt install -y ssh net-tools terminator ntpdate curl vim git
 sudo ntpdate ntp.ubuntu.com
 
-
 # Install ROS
-echo -e "\033[1;31mStarting ROS $ROS_DISTRO installation ...\033[0m"
+echo -e "\033[1;31mInstall ROS $ROS_DISTRO.\033[0m"
+
 sudo sh -c 'echo "deb http://packages.ros.org/ros/ubuntu $(lsb_release -sc) main" > /etc/apt/sources.list.d/ros-latest.list'
 curl -s https://raw.githubusercontent.com/ros/rosdistro/master/ros.asc | sudo apt-key add -
 sudo apt update
@@ -81,10 +79,10 @@ fi
 sudo rosdep init
 rosdep update
 
-
 # Create the ROS workspace
+echo -e "\033[1;31mCreate the ROS workspace.\033[0m"
+
 if [ ! -d "$HOME/catkin_ws" ]; then
-  echo -e "\033[1;31mCreating ROS workspace ...\033[0m"
   mkdir -p ~/catkin_ws/src
   cd ~/catkin_ws/src
   catkin_init_workspace
@@ -92,18 +90,19 @@ if [ ! -d "$HOME/catkin_ws" ]; then
   catkin_make
 fi
 
-
 # Create the ROS enviornmnet file
+echo -e "\033[1;31mCreate the ROS enviornmnet file.\033[0m"
+
 if [ ! -f "$HOME/env.sh" ] && [ ! -f "/etc/ros/env.sh" ]; then
-  echo -e "\nsource /etc/ros/env.sh" >> ~/.bashrc
+  echo -e "\nsource /etc/ros/env.sh" >>~/.bashrc
 fi
 
 if [ -f "$HOME/env.sh" ]; then
- sudo rm $HOME/env.sh
+  sudo rm $HOME/env.sh
 fi
 
 if [ -f "/etc/ros/env.sh" ]; then
- sudo rm /etc/ros/env.sh
+  sudo rm /etc/ros/env.sh
 fi
 
 echo -e "#!/bin/bash
@@ -113,6 +112,16 @@ echo -e "#!/bin/bash
 source /opt/ros/$ROS_DISTRO/setup.bash
 source ~/catkin_ws/devel/setup.bash
 
-export ROS_MASTER_URI=http://localhost:11311" >> $HOME/env.sh
+export ROS_MASTER_URI=http://localhost:11311" >>$HOME/env.sh
 
 sudo mv $HOME/env.sh /etc/ros/
+
+# Install the RealSense SDK
+echo -e "\033[1;31mInstall the RealSense SDK.\033[0m"
+
+sudo apt install -y apt-transport-https
+sudo mkdir -p /etc/apt/keyrings
+curl -sSf https://librealsense.intel.com/Debian/librealsense.pgp | sudo tee /etc/apt/keyrings/librealsense.pgp >/dev/null
+echo "deb [signed-by=/etc/apt/keyrings/librealsense.pgp] https://librealsense.intel.com/Debian/apt-repo $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/librealsense.list
+sudo apt update
+sudo apt install -y librealsense2-dkms librealsense2-utils
